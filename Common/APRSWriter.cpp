@@ -344,24 +344,24 @@ void CAPRSWriter::sendIdFramesFixed()
 		wxString desc;
 		if (entry->getBand().Len() > 1U) {
 			if (entry->getFrequency() != 0.0)
-				desc.Printf(wxT("Data %.5lfMHz"), entry->getFrequency());
+				desc.Printf(wxT("Data (D-Star) %.5lfMHz"), entry->getFrequency());
 			else
-				desc = wxT("Data");
+				desc = wxT("Data (D-Star)");
 		} else {
 			if (entry->getFrequency() != 0.0)
-				desc.Printf(wxT("Voice %.5lfMHz %c%.4lfMHz"),
+				desc.Printf(wxT("Voice (D-Star) %.5lfMHz %c%.4lfMHz"),
 						entry->getFrequency(),
 						entry->getOffset() < 0.0 ? wxT('-') : wxT('+'),
 						::fabs(entry->getOffset()));
 			else
-				desc = wxT("Voice");
+				desc = wxT("Voice (D-Star)");
 		}
 
 		wxString band;
 		if (entry->getFrequency() >= 1200.0)
-			band = wxT("1.2");
+			band = wxT("23cm/1.2GHz");
 		else if (entry->getFrequency() >= 420.0)
-			band = wxT("440");
+			band = wxT("70cm");
 		else if (entry->getFrequency() >= 144.0)
 			band = wxT("2m");
 		else if (entry->getFrequency() >= 50.0)
@@ -456,7 +456,11 @@ void CAPRSWriter::sendIdFramesMobile()
 		return;
 #endif
 
+#if GPSD_API_MAJOR_VERSION >= 10
+	if (m_gpsdData.fix.status != STATUS_FIX)
+#else
 	if (m_gpsdData.status != STATUS_FIX)
+#endif
 		return;
 
 	bool latlonSet   = (m_gpsdData.set & LATLON_SET) == LATLON_SET;
@@ -489,24 +493,24 @@ void CAPRSWriter::sendIdFramesMobile()
 		wxString desc;
 		if (entry->getBand().Len() > 1U) {
 			if (entry->getFrequency() != 0.0)
-				desc.Printf(wxT("Data %.5lfMHz"), entry->getFrequency());
+				desc.Printf(wxT("Data (D-Star) %.5lfMHz"), entry->getFrequency());
 			else
-				desc = wxT("Data");
+				desc = wxT("Data (D-Star)");
 		} else {
 			if (entry->getFrequency() != 0.0)
-				desc.Printf(wxT("Voice %.5lfMHz %c%.4lfMHz"),
+				desc.Printf(wxT("Voice (D-Star) %.5lfMHz %c%.4lfMHz"),
 						entry->getFrequency(),
 						entry->getOffset() < 0.0 ? wxT('-') : wxT('+'),
 						::fabs(entry->getOffset()));
 			else
-				desc = wxT("Voice");
+				desc = wxT("Voice (D-Star)");
 		}
 
 		wxString band;
 		if (entry->getFrequency() >= 1200.0)
-			band = wxT("1.2");
+			band = wxT("23cm/1.2GHz");
 		else if (entry->getFrequency() >= 420.0)
-			band = wxT("440");
+			band = wxT("70cm");
 		else if (entry->getFrequency() >= 144.0)
 			band = wxT("2m");
 		else if (entry->getFrequency() >= 50.0)
